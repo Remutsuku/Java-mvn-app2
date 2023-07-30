@@ -1,4 +1,8 @@
 // update this scipt to match with  my pipeline for Maven-webapp-assignment
+
+//used this to define my public ip to tomcatPublicIP so i can script it to send an email with a link to the webapp eg. (tomcatIP:8080/*targetfile)
+def tomcatPublicIP = "65.2.69.80:8080"
+
 pipeline {
     agent { label 'slave1' }
 
@@ -6,7 +10,7 @@ pipeline {
         // Install the Maven version configured as "M3" and add it to the path.
         maven "maven-3.6.3"
     }
-
+        
     stages {
         stage('SCM Checkout') {
             steps {
@@ -23,7 +27,7 @@ pipeline {
             post {
                 failure {
                     echo 'Send mail on failure'
-                    mail bcc: '', body: "Please go to ${BUILD_URL} and verify the build", cc: 'rocksings456@gmail.com', from: '', replyTo: '', subject: 'Build Notification', to: 'rocksings456@gmail.com'
+                    mail bcc: '', body: "Please go to http://${tomcatPublicIP}/mvn-hello-world/ and verify the build", cc: 'rocksings456@gmail.com', from: '', replyTo: '', subject: 'Build Notification', to: 'rocksings456@gmail.com'
                 }
             }
         }
@@ -66,15 +70,16 @@ pipeline {
             post {
                 success {
                     echo 'Send mail on success'
-                    mail bcc: '', body: "Please go to ${BUILD_URL} and verify the build", cc: 'rocksings456@gmail.com', from: '', replyTo: '', subject: 'Build Notification', to: 'rocksings456@gmail.com'
+                    mail bcc: '', body: "Please go to http://${tomcatPublicIP}/mvn-hello-world/ and verify the build", cc: 'rocksings456@gmail.com', from: '', replyTo: '', subject: 'Build Notification', to: 'rocksings456@gmail.com'
                     echo 'Build successful! Deployed to Tomcat.' 
                 }
                 failure {
                     echo 'Send mail on failure'
-                    mail bcc: '', body: "Please go to ${BUILD_URL} and verify the build", cc: 'rocksings456@gmail.com', from: '', replyTo: '', subject: 'Build Notification', to: 'rocksings456@gmail.com'
+                    mail bcc: '', body: "Please go to http://${tomcatPublicIP}/mvn-hello-world/ and verify the build", cc: 'rocksings456@gmail.com', from: '', replyTo: '', subject: 'Build Notification', to: 'rocksings456@gmail.com'
                     echo 'Build failed. Deployment to Tomcat was not successful.'
                 }
             }
         }
     }
 }
+
