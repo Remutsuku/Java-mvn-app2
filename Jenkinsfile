@@ -1,31 +1,99 @@
+// update this scipt to match with  my pipeline for Maven-webapp-assignment
 pipeline {
-    agent { label 'sa-javaslave' }
+    agent { label 'slave1' }
 
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
-        maven "slave_maven"
+        maven "maven-3.6.3"
     }
 
     stages {
         stage('SCM Checkout') {
             steps {
-                echo 'Checkout Src from github repo'
-		git 'https://github.com/LoksaiETA/Java-mvn-app2.git'
+                echo 'Perform SCM Checkout'
+                git 'https://github.com/Remutsuku/Java-mvn-app2'
             }
         }
-        stage('Maven Build') {
+
+        stage('Build') {
             steps {
-                echo 'Perform Maven Build'
-                // Run Maven on a Unix agent.
+                echo 'Perform Build'
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
             }
+            post {
+                failure {
+                    echo 'Send mail on failure'
+                    mail bcc: '', body: "Please go to ${BUILD_URL} and verify the build", cc: 'rocksings456@gmail.com', from: '', replyTo: '', subject: 'Build Notification', to: 'rocksings456@gmail.com'
+                }
+            }
         }
-        stage('Deploy to QA Server') {
+
+        stage('Compile') {
             steps {
-		script {
-		sshPublisher(publishers: [sshPublisherDesc(configName: 'QA_Server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: 'target/', sourceFiles: 'target/mvn-hello-world.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-		}
+                echo 'Perform Compile'
+                sh "mvn compile"
+            }
         }
-	}
+
+        stage('Code Review') {
+            steps {
+                echo 'Perform Code Review'
+                //Pauses the pipeline for code review
+                input message: "Please review the code changes and approve:", ok: "Approve"
+            }
+        }
+
+        stage('Unit Test') {
+            steps {
+                echo 'Perform Unit Test'
+                sh "mvn test"
+            }
+        }
+
+        stage('Package') {
+            steps {
+                echo 'Perform Package'
+                sh "mvn package"
+            }
+        }
+
+        stage('Deploy to Tomcat_Server') {
+            steps {
+                script {
+                    sshPublisher(publishers: [sshPublisherDesc(
+                        configName: 'tomcat',
+                        transfers: [sshTransfer(
+                            cleanRemote: false,
+                            excludes: '',
+                            execCommand: '',
+                            execTimeout: 120000,
+                            flatten: false,
+                            makeEmptyDirs: false,
+                            noDefaultExcludes: false,
+                            patternSeparator: '[, ]+',
+                            remoteDirectory: '.',
+                            remoteDirectorySDF: false,
+                            removePrefix: 'target/',
+                            sourceFiles: 'target/mvn-hello-world.war'
+                        )],
+                        usePromotionTimestamp: false,
+                        useWorkspaceInPromotion: false,
+                        verbose: false
+                    )])
+                }
+            }
+            post {
+                success {
+                    echo 'Send mail on success'
+                    mail bcc: '', body: "Please go to ${BUILD_URL} and verify the build", cc: 'rocksings456@gmail.com', from: '', replyTo: '', subject: 'Build Notification', to: 'rocksings456@gmail.com'
+                    echo 'Build successful! Deployed to Tomcat.' 
+                }
+                failure {
+                    echo 'Send mail on failure'
+                    mail bcc: '', body: "Please go to ${BUILD_URL} and verify the build", cc: 'rocksings456@gmail.com', from: '', replyTo: '', subject: 'Build Notification', to: 'rocksings456@gmail.com'
+                    echo 'Build failed. Deployment to Tomcat was not successful.'
+                }
+            }
+        }
     }
 }
