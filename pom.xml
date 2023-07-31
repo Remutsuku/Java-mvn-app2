@@ -69,15 +69,15 @@
                     </formats>
                     <!-- Set the output directory for coverage report -->
                     <outputDirectory>${project.build.directory}/site/cobertura</outputDirectory>
+                    <!-- Exclude test classes from instrumentation -->
+                    <instrumentation>
+                        <excludes>
+                            <exclude>**/*Test.class</exclude>
+                        </excludes>
+                    </instrumentation>
                 </configuration>
                 <executions>
-                    <execution>
-                        <id>clean</id>
-                        <phase>clean</phase>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                    </execution>
+                    <!-- Remove the execution with id "clean" since it's already handled by maven-clean-plugin -->
                     <execution>
                         <id>instrument</id>
                         <phase>process-classes</phase>
