@@ -61,7 +61,7 @@
                 <!-- Cobertura Plugin -->
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.7</version>
+                <version>${cobertura.version}</version>
                 <configuration>
                     <!-- Set the format of coverage report -->
                     <formats>
@@ -75,8 +75,8 @@
                             <exclude>**/*Test.class</exclude>
                         </excludes>
                     </instrumentation>
-                    <!-- Specify a different tempDirectory to avoid conflict -->
-                    <tempDirectory>${project.build.directory}/cobertura-temp</tempDirectory>
+                    <!-- Specify a different data file to avoid conflict -->
+                    <dataFile>${project.build.directory}/cobertura.ser</dataFile>
                 </configuration>
                 <executions>
                     <!-- Remove the execution with id "clean" since it's already handled by maven-clean-plugin -->
