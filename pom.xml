@@ -75,6 +75,13 @@
 						</goals>
 					</execution>
 				</executions>
+				<repositories>
+					<repository>
+						<id>cobertura-maven-plugin-repo</id>
+						<name>Cobertura Maven Plugin Repository</name>
+						<url>https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/</url>
+					</repository>
+				</repositories>
 			</plugin>
 		</plugins>
 	</build>
