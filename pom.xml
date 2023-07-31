@@ -61,7 +61,7 @@
                 <!-- Cobertura Plugin -->
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
-                <version>${cobertura.version}</version>
+                <version>2.10</version>
                 <configuration>
                     <!-- Set the format of coverage report -->
                     <formats>
