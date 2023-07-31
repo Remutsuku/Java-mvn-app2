@@ -9,7 +9,7 @@
 	<name>mvn-hello-world Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<properties>
-		<cobertura.version>2.8</cobertura.version>
+		<cobertura.version>2.1.1</cobertura.version>
 	</properties>
 	<dependencies>
 		<dependency>
