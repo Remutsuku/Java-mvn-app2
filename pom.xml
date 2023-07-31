@@ -97,4 +97,18 @@
 			</plugin>
 		</plugins>
 	</build>
+	<reporting>
+		<plugins>
+			<!-- Cobertura Report Plugin -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>${cobertura.version}</version>
+				<configuration>
+					<!-- Specify the path to the generated coverage.xml -->
+					<outputDirectory>${project.build.directory}/cobertura</outputDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>
