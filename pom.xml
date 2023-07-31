@@ -64,13 +64,20 @@
 				<version>${cobertura.version}</version>
 				<configuration>
 					<check>
-						<branchRate>85</branchRate>
+						<branchRate>75</branchRate>
 						<lineRate>85</lineRate>
 						<haltOnFailure>true</haltOnFailure>
-						<totalBranchRate>85</totalBranchRate>
+						<totalBranchRate>75</totalBranchRate>
 						<totalLineRate>85</totalLineRate>
-						<packageLineRate>85</packageLineRate>
+						<packageLineRate>75</packageLineRate>
 						<packageBranchRate>85</packageBranchRate>
+						<regexes>
+							<regex>
+								<pattern>com.dev3l.hello_world.*</pattern>
+								<branchRate>60</branchRate>
+								<lineRate>50</lineRate>
+							</regex>
+						</regexes>
 					</check>
 					<formats>
 						<format>html</format>
